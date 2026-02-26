@@ -1,14 +1,13 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-import pickle
+import joblib
 import pandas as pd
 
 app = Flask(__name__)
 CORS(app)
 
 # Load trained pipeline model
-with open("xgb_model.pkl", "rb") as f:
-    model = pickle.load(f)
+model = joblib.load("xgb_model.pkl")
 
 
 @app.route("/predict", methods=["POST"])
@@ -36,8 +35,6 @@ def predict():
             "Duration": duration,
             "Heart_Rate": heart_rate,
             "Body_Temp": body_temp,
-            "BMI": bmi,
-            "Max_HR": max_hr
         }])
 
         prediction = model.predict(input_data)
